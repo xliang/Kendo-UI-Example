@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+        #connection {
+            font-size: 1.3em;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="k-content">
+        <div id="loading"></div>
+        <div id="chart"></div>
+    </div>
+    <script>
+        $(function () {
+
+            $("#chart").kendoChart({
+                dataSource: {
+                    transport: {
+                        read: function (op) {
+
+                            setTimeout(function () {
+                                op.success([{
+                                    "country": "Spain",
+                                    "year": "2008",
+                                    "unit": "GWh",
+                                    "solar": 2578,
+                                    "hydro": 26112,
+                                    "wind": 32203,
+                                    "nuclear": 58973
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2007",
+                                    "unit": "GWh",
+                                    "solar": 508,
+                                    "hydro": 30522,
+                                    "wind": 27568,
+                                    "nuclear": 55103
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2006",
+                                    "unit": "GWh",
+                                    "solar": 119,
+                                    "hydro": 29831,
+                                    "wind": 23297,
+                                    "nuclear": 60126
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2005",
+                                    "unit": "GWh",
+                                    "solar": 41,
+                                    "hydro": 23025,
+                                    "wind": 21176,
+                                    "nuclear": 57539
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2004",
+                                    "unit": "GWh",
+                                    "solar": 56,
+                                    "hydro": 34439,
+                                    "wind": 15700,
+                                    "nuclear": 63606
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2003",
+                                    "unit": "GWh",
+                                    "solar": 41,
+                                    "hydro": 43897,
+                                    "wind": 12075,
+                                    "nuclear": 61875
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2002",
+                                    "unit": "GWh",
+                                    "solar": 30,
+                                    "hydro": 26270,
+                                    "wind": 9342,
+                                    "nuclear": 63016
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2001",
+                                    "unit": "GWh",
+                                    "solar": 24,
+                                    "hydro": 43864,
+                                    "wind": 6759,
+                                    "nuclear": 63708
+                                }, {
+                                    "country": "Spain",
+                                    "year": "2000",
+                                    "unit": "GWh",
+                                    "solar": 18,
+                                    "hydro": 31807,
+                                    "wind": 4727,
+                                    "nuclear": 62206
+                                }]);
+                            }, 4000);
+                        }
+                    },
+                    sort: {
+                        field: "year",
+                        dir: "asc"
+                    },
+                    requestStart: function () {
+                        kendo.ui.progress($("#loading"), true);
+                    },
+                    requestEnd: function () {
+                        kendo.ui.progress($("#loading"), false);
+
+                    }
+                },
+                title: {
+                    text: "Spain electricity production (GWh)"
+                },
+                legend: {
+                    position: "top"
+                },
+                seriesDefaults: {
+                    type: "area"
+                },
+                series: [{
+                    field: "nuclear",
+                    name: "Nuclear"
+                }, {
+                    field: "hydro",
+                    name: "Hydro"
+                }, {
+                    field: "wind",
+                    name: "Wind"
+                }],
+                categoryAxis: {
+                    field: "year",
+                    labels: {
+                        rotation: -90
+                    }
+                },
+                valueAxis: {
+                    labels: {
+                        format: "N0"
+                    },
+                    majorUnit: 10000
+                },
+                tooltip: {
+                    visible: true,
+                    format: "N0"
+                }
+            });
+        }); 
+    </script>
+</body>
+</html>

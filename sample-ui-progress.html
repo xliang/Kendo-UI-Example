@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>sample kendo ui progress</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.dataviz.bootstrap.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.408/js/kendo.all.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.408/js/kendo.timezones.min.js"></script>
+
+    <script src="theme-chooser.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <!--[if lt IE 9]>
+    <script src="vendor/html5shiv.js"></script>
+    <script src="vendor/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        #customerSettings {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+        <button class="k-button" id="progressStartButton" >Start Loading Progress</button>
+        <button class="k-button" id="progressEndButton" >End Loading Progress</button>
+        <div id="tabStripCompany">
+                        <ul>
+                            <li class="k-state-active">One Tab</li>
+                            <li>Other Tab</li>
+                        </ul>
+                        <!-- Settings tab -->
+                        <div id="settingsTab" >
+                            <div id="customerSettingsLoading" ></div>
+                            <div id="customerSettings">
+
+                                <input id="licensestartdate" /><br/>
+                                <input id="testuser" type="checkbox" value="true" />
+                                <label for="testuser" >Test User</label><br/>
+                                <input id="accountactive" type="checkbox" value="true" />
+                                <label for="accountactive" >Account Active</label><br/>
+                                <input id="emailoutput" type="checkbox" value="true" />
+                                <label for="emailoutput" >Email Output</label><br/>
+                            </div>
+                        </div>
+                        <div >
+                            More stuff here...
+                        </div>
+                    </div>
+   <script>
+    $("#progressStartButton").click(function() {
+        kendo.ui.progress($("#customerSettings"), true);
+    });
+
+    $("#progressEndButton").click(function() {
+        kendo.ui.progress($("#customerSettings"), false);
+    });
+
+    $("#tabStripCompany").kendoTabStrip();
+
+   </script>
+</body>
+</html>

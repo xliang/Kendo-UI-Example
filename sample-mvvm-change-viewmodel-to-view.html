@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    
+    <link rel="stylesheet" href="vendors/kendo/style/kendo.common.min.css" />
+    <link rel="stylesheet" href="vendors/kendo/style/kendo.default.min.css" />
+    <script src="vendors/kendo/js/jquery.min.js"></script>
+    <script src="vendors/kendo/js/kendo.all.min.js"></script>
+
+   <style type="text/css">
+		.title {
+		    font-weight: bold;
+		    font-size: 18px;
+		}
+
+		#personFields {
+		    margin-top: 20px;
+		}
+
+		.field {
+		    display: block;
+		    width: 100%;
+		    padding-bottom: 5px;
+		}
+
+		.field div {
+		    display: inline-block;
+		    width: 100px;
+		}
+
+   </style>
+
+</head>
+<body>
+	<div class="title">Instructions</div>
+	<ol>
+	    <li>Change the "First Name" or "Last Name" and see the "Full Name" change.</li>
+	    <li>Click the Reset button to see the Fist Name and Last Name get reset to it's original values.</li>
+	</ol>
+
+	<div id="personFields">
+	    <div class="field">
+	        <div>First Name:</div><input data-bind="value: firstName"/>
+	    </div>
+	    <div class="field">
+	        <div>Last Name:</div><input data-bind="value: lastName"/>
+	    </div>
+	    <div class="field">
+	        <div>Full Name:</div><span data-bind="text: fullName"/>
+	    </div>
+	    
+	    <button class="k-button" data-bind="click: reset">Reset</button>
+	</div>
+
+</body>
+<script>
+	 $(document).ready(function () {
+	 		var person = kendo.observable({
+		    firstName: "John",
+		    lastName: "DeVight",
+
+		    // Create a calculated field.
+		    fullName: function() {
+		        // The "get" function must be used so that changes to any
+		        // dependencies will be reflected in the calculated field.
+		        return this.get("firstName") + " " + this.get("lastName");
+		    },
+		    
+		    reset: function () {
+                
+		        this.set("firstName", "John");
+		        this.set("lastName", "DeVight");
+		    }
+		});
+
+			// Bind the view model to the personFields element.
+	 		kendo.bind($('#personFields'), person);
+       
+	 }); 
+
+</script>
+</html>

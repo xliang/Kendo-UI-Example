@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+   
+
+</head>
+<body>
+   <h1>MVVM Demo</h1>
+    <div id="studentview">
+        <input data-bind="value: name" />
+        <input data-bind="value: age" />
+        <button data-bind="click: sayHello">Say Hello</button>
+    </div>
+    <script>
+     $(document).ready(function () {
+
+            var studentViewModel = kendo.observable({
+                name: "Dhananjay Kumar",
+                age : 30 ,
+                sayHello: function () {
+                    var name = this.get("name");
+                    var age = this.get("age");
+                    alert("Hello, " + name + "You are" + age + "Years Old") ;
+                }
+            });
+
+            kendo.bind($("#studentview"), studentViewModel);
+        });
+
+    </script>
+</body>
+
+</html>

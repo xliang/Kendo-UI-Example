@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+    <style type="text/css">
+        html
+        {
+            font: 12px sans-serif;
+        }
+
+        .k-grid-content > .k-loading-mask
+        {
+            visibility: hidden;
+        }
+
+        .k-grid > .k-loading-mask
+        {
+            z-index: 2;
+        }
+
+        .k-grid > .k-loading-mask > .k-loading-color
+        {
+            opacity: .7;
+        }
+    </style>
+
+</head>
+<body>
+   <p><button type="button" class="k-button" id="stopRefresh">Stop automatic refresh</button></p>
+
+    <div id="grid"></div>
+    <script>
+        var gridElement = $("#grid");
+
+        function restoreSelection(e) {
+            var grid = e.sender;
+            var trs = grid.tbody.children("tr");
+            var selectedRows = trs.eq(0).add(trs.eq(3)).add(trs.eq(7));
+            selectedRows.addClass("k-state-selected");
+            kendo.ui.progress(gridElement, false);
+        }
+
+        function showLoading(e) {
+            kendo.ui.progress(gridElement, true);
+        }
+
+        gridElement.kendoGrid({
+            dataSource: {
+                requestStart: showLoading,
+                type: "odata",
+                transport: {
+                    read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
+            },
+            schema: {
+                model: {
+                    fields: {
+                        OrderID: { type: "number" },
+                        Freight: { type: "number" },
+                        ShipName: { type: "string" },
+                        OrderDate: { type: "date" }
+                    }
+                }
+            },
+            pageSize: 300,
+            serverPaging: true,
+            serverFiltering: true,
+            serverSorting: true
+        },
+        height: 300,
+        dataBound: restoreSelection,
+        resizable: true,
+        pageable: true,
+        columns: [{
+            field:"OrderID"
+        }, {
+            field: "Freight"
+        }, {
+            field: "OrderDate",
+            title: "Order Date",
+            format: "{0:MM/dd/yyyy}"
+        }, {
+            field: "ShipName",
+            title: "Ship Name"
+        }]
+    });
+
+    var interval = setInterval(function(){
+        $("#grid").data("kendoGrid").dataSource.read();
+    }, 4000);
+
+    $("#stopRefresh").click(function(){
+        clearInterval(interval);
+    });
+    </script>
+</body>
+
+</html>

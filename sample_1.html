@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+<link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+</head>
+
+<body>
+    <h1>imperative instantiation via widget constructor:</h1>
+    <input value="10" />
+    <h5>results: <span>10</span></h5>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+  
+    <script>
+    //invoke widget constructor directly
+    var slider = new kendo.ui.Slider(document.querySelector('input'), {
+        min: 0,
+        max: 50,
+        smallStep: 5,
+        largeStep: 10,
+        change: function () {
+            document.querySelector('h5 span').textContent = this.value();
+        }
+    });
+
+    
+    //unlike jQuery no need to get instance you alredy have it, via slider
+    console.log(slider.value());
+
+    </script>
+</body>
+</html>
+
+<!-- 
+
+    CTRL + ALT + F - Firefox
+    CTRL + ALT + C - Chrome
+    CTRL + ALT + I - Internet Explorer
+    CTRL + ALT + S - Safari
+
+-->

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+     <div id="demo-grid"></div>
+
+    <script id="detail-template" type="text/x-kendo-template">
+        <div>
+            <span>Phone Number for #=name#:</span>
+            <span data-bind="text: phone" />
+            <input data-bind="value: phone" />
+        </div>
+    </script>
+</body>
+</html>
+<script>
+    $(function () {
+        var ds = new kendo.data.DataSource({
+            data: [
+                { name: "Joe", phone: "212-555-1234" },
+                { name: "Sally", phone: "212-999-7785" },
+                { name: "Bill", phone: "212-244-7035" }
+            ]
+        });
+        
+        var scholarGrid = $("#demo-grid").kendoGrid({
+            filterable: false,
+            dataSource: ds,
+            detailTemplate: kendo.template($("#detail-template").html()),
+            detailInit: function (e) {
+                // without this line, detail template bindings will not work
+                kendo.bind(e.detailRow, e.data);
+            }
+        }).data("kendoGrid");
+           
+    });
+</script>

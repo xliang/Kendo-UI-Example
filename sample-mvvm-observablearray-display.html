@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Not Working</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+        .title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #peopleList {
+            width: 475px;
+            margin-top: 5px;
+        }
+
+        #commands {
+            width: 473px;
+            background-color: #C0C0C0;
+        }
+
+        table {
+            width: 475px;
+        }
+
+        table, th, td, #commands {
+            border: 1px solid Gray;
+        }
+
+        th {
+            width: 100px;
+            background-color: Gray;
+            color: White;
+        }
+
+        th:last-child {
+            width: 30px;
+        }
+
+        td {
+            padding-left: 4px;
+            padding-top: 2px;
+            height: 25px;
+        }
+
+        td input {
+            width: 90px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Not Working</h1>
+    <div class="title">Instructions</div>
+    <ul>
+        <li>Change the "First Name" or "Last Name" and see the "Full Name" change.</li>
+        <li>Try adding and deleting people.</li>
+    </ul>
+
+    <div id="peopleList">
+        <div id="commands">
+            <button data-bind="click: add" class="k-button">Add</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Full Name</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-bind="source: people" data-template="personTemplate"></tbody>
+        </table>
+    </div>
+
+    <script type="text/x-kendo-template" id="personTemplate">
+        <tr>
+            <td><input data-bind="value: firstName" /></td>
+            <td><input data-bind="value: lastName" /></td>
+            <td><span data-bind="text: fullName" /></td>
+            <td><select data-bind="source: roles, value: roleId" data-template="selectRoleTemplate"></select></td>
+            <td><button class="k-button" data-bind="click: delete">X</button></td>
+        </tr>
+    </script>
+
+    <script type="text/x-kendo-template" id="selectRoleTemplate">
+        <option data-bind="value: id, text: name" />
+    </script>
+
+    <script>
+        $(document).ready(function (){
+            // Define a Person model.
+            var Person = kendo.data.Model.define({
+                fields: {
+                    "firstName": {
+                        type: "string"
+                    },
+                    "lastName": {
+                        type: "string"
+                    },
+                    "roleId": {
+                        type: "number"
+                    }
+                },
+
+                // Define a function for fullName to get the firstName and lastName
+                // and concatenate them together.
+                fullName: function () {
+                    return this.get("firstName") + " " + this.get("lastName");
+                }
+            });
+
+            // Create an observable object with an obserable array where each item
+            // in the array is an instance of a Person model.
+            var vm = kendo.observable({
+                people: [
+                    new Person({
+                        firstName: "John",
+                        lastName: "DeVight",
+                        roleId: 2
+                    }),
+                    new Person({
+                        firstName: "Wendy",
+                        lastName: "Parry",
+                        roleId: 1
+                    })
+                ],
+
+                roles: [
+                    {
+                        id: 1,
+                        name: "CEO"
+                    },
+                {
+                    id: 2,
+                    name: "Developer"
+                },
+                {
+                    id: 3,
+                    name: "Tester"
+                }
+                ],
+
+                // Add a new person to the array.
+                add: function () {
+                    this.people.push(new Person());
+                },
+
+                // Delete the person from the array.
+                //delete: function (e) {
+                //    var that = this;
+                //    $.each(that.people, function (idx, person) {
+                //        if (e.data.uid === person.uid) {
+                //            that.people.splice(idx, 1);
+                //            return true;
+                //        }
+                //    });
+                //}
+            });
+
+            kendo.bind($("#peopleList"), vm);
+            
+         
+        }); 
+
+    </script>
+</body>
+</html>

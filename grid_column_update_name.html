@@ -1,0 +1,88 @@
+<!-- 
+	Description: 
+	
+	update grid column heading dynamically. 
+--> 
+
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="http://demos.telerik.com/kendo-ui/grid/index">
+    <style>html { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }</style>
+    <title></title>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2014.3.1411/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1411/js/kendo.all.min.js"></script>
+</head>
+<body>
+
+        <div id="example">
+            <div id="grid"></div>
+
+            <script>
+                $(document).ready(function () {
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+                            },
+                            pageSize: 20
+                        },
+                        height: 550,
+                        groupable: true,
+                        sortable: true,
+                        pageable: {
+                            refresh: true,
+                            pageSizes: true,
+                            buttonCount: 5
+                        },
+                        columns: [{
+                            field: "ContactName",
+                            title: "Contact Name",
+                            width: 200
+                        }, {
+                            field: "ContactTitle",
+                            title: "Contact Title"
+                        }, {
+                            field: "CompanyName",
+                            title: "Company Name"
+                        }, {
+                            field: "Country",
+                            width: 150
+                        }]
+                    });
+                  
+                  setTimeout(function() {
+                  	$("#grid th[data-field=ContactName] .k-link").html("NewTitle");
+                    $("#grid th[data-field=ContactTitle] .k-link").html("NewTitle 2");
+                    
+                    //Another approach - using the "setOptions" method of the Grid:
+                    //$("#grid").data("kendoGrid").setOptions({
+                    //	columns: [[{
+                    //        field: "ContactName",
+                    //        title: "NEW NAME",
+                    //        width: 200
+                    //    }, {
+                    //        field: "ContactTitle",
+                    //        title: "Contact Title"
+                    //    }, {
+                    //        field: "CompanyName",
+                    //        title: "Company Name"
+                    //    }, {
+                    //        field: "Country",
+                    //        width: 150
+                    //    }]]
+                    //}, 100);
+                  });
+                });
+            </script>
+        </div>
+
+
+</body>
+</html>

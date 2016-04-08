@@ -1,0 +1,146 @@
+<!-- 
+
+auto-generate columns and model definition
+
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="http://demos.telerik.com/kendo-ui/grid/index">
+    <style>html { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }</style>
+    <title></title>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1411/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2014.3.1411/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1411/js/kendo.all.min.js"></script>
+
+</head>
+<body>
+
+        <div id="example">
+            <div id="grid"></div>
+        
+
+        </div>
+         <script>
+
+//example data received from remote source via jQuery ajax merthod
+var data = [{
+  "Name": "daya",
+  "Role": "Developer",
+  "Dept": "Dev",
+  "Date": "\/Date(836438400000)\/",
+  "Balance": 23
+}, {
+  "Name": "siva",
+  "Role": "Developer",
+  "Dept": "Dev",
+  "Date": "\/Date(836438400000)\/",
+  "Balance": 23
+}, {
+  "Name": "sivadaya",
+  "Role": "Developer",
+  "Dept": "Dev",
+  "Date": "\/Date(836438400000)\/",
+  "Balance": 23
+}, {
+  "Name": "dayasiva",
+  "Role": "Developer",
+  "Dept": "Dev",
+  "Date": "\/Date(836438400000)\/",
+  "Balance": 23
+}];
+
+//in the success handler of the ajax method call the function below with the received data:
+var dateFields = [];
+generateGrid(data)
+
+function generateGrid(gridData) {
+
+  var model = generateModel(gridData[0]);
+
+  var parseFunction;
+  if (dateFields.length > 0) {
+    parseFunction = function (response) {
+      for (var i = 0; i < response.length; i++) {
+        for (var fieldIndex = 0; fieldIndex < dateFields.length; fieldIndex++) {
+          var record = response[i];
+          record[dateFields[fieldIndex]] = kendo.parseDate(record[dateFields[fieldIndex]]);
+        }
+      }
+      return response;
+    };
+  }
+
+  var grid = $("#grid").kendoGrid({
+    dataSource: {
+      data: gridData,
+      schema: {
+        model: model,
+        parse: parseFunction
+      }
+    },
+    editable: true,
+    sortable: true
+  });
+}
+
+function generateModel(gridData) {
+  var model = {};
+  model.id = "ID";
+  var fields = {};
+  for (var property in gridData) {
+    var propType = typeof gridData[property];
+
+    if (propType == "number") {
+      fields[property] = {
+        type: "number",
+        validation: {
+          required: true
+        }
+      };
+    } else if (propType == "boolean") {
+      fields[property] = {
+        type: "boolean",
+        validation: {
+          required: true
+        }
+      };
+    } else if (propType == "string") {
+      var parsedDate = kendo.parseDate(gridData[property]);
+      if (parsedDate) {
+        fields[property] = {
+          type: "date",
+          validation: {
+            required: true
+          }
+        };
+        dateFields.push(property);
+      } else {
+        fields[property] = {
+          validation: {
+            required: true
+          }
+        };
+      }
+    } else {
+      fields[property] = {
+        validation: {
+          required: true
+        }
+      };
+    }
+
+  }
+  model.fields = fields;
+
+  return model;
+}
+            </script>
+
+</body>
+</html>
