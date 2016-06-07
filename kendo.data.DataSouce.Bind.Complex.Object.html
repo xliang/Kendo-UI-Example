@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="grid"></div>
+</body>
+</html>
+<script>
+     $(function () {
+
+    // define a json as array type 
+    var peoples = { "people": [{ "name": "John Smith", "phone": "(519) 420-2391", "address": { "street": "123 Main St", "city": "Someplace" } }, { "name": "John2 Smith", "phone": "(519) 420-2391", "address": { "street": "123 Main St", "city": "Someplace" } } ] };
+
+    
+$("#grid").kendoGrid({ dataSource: { data: peoples, schema: { data: 'people' } }, columns: [ { field: "name" }, { field: "phone" }, { field: "address.street", title: "Address / Street" }, { field: "address.city", title: "Address / City" } ] });
+
+           
+    });
+</script>

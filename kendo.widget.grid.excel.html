@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2016.2.504/js/jszip.min.js"></script>
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="example">
+    <div id="grid" style="width: 900px"></div>
+    <script>
+        $("#grid").kendoGrid({
+            toolbar: ["Export"],
+            dataSource: {
+                type: "odata",
+                transport: {
+                    read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
+                },
+                schema:{
+                    model: {
+                        fields: {
+                            UnitsInStock: { type: "number" },
+                            ProductName: { type: "string" },
+                            UnitPrice: { type: "number" },
+                            UnitsOnOrder: { type: "number" },
+                            UnitsInStock: { type: "number" }
+                        }
+                    }
+                },
+                pageSize: 7,
+                group: {
+                    field: "UnitsInStock", aggregates: [
+                        { field: "ProductName", aggregate: "count" },
+                        { field: "UnitPrice", aggregate: "sum"},
+                        { field: "UnitsOnOrder", aggregate: "average" },
+                        { field: "UnitsInStock", aggregate: "count" }
+                    ]
+                },
+                aggregate: [
+                    { field: "ProductName", aggregate: "count" },
+                    { field: "UnitPrice", aggregate: "sum" },
+                    { field: "UnitsOnOrder", aggregate: "average" },
+                    { field: "UnitsInStock", aggregate: "min" },
+                    { field: "UnitsInStock", aggregate: "max" }
+                ]
+            },
+            sortable: true,
+            pageable: true,
+            groupable: true,
+            filterable: true,
+            columnMenu: true,
+            reorderable: true,
+            resizable: true,
+            columns: [
+                { width: 300, locked: true, field: "ProductName", title: "Product Name", aggregates: ["count"], footerTemplate: "Total Count: #=count#", groupFooterTemplate: "Count: #=count#" },
+                { width: 300, field: "UnitPrice", title: "Unit Price", aggregates: ["sum"] },
+                { width: 300, field: "UnitsOnOrder", title: "Units On Order", aggregates: ["average"], footerTemplate: "Average: #=average#",
+                    groupFooterTemplate: "Average: #=average#" },
+                { width: 300, field: "UnitsInStock", title: "Units In Stock", aggregates: ["min", "max", "count"], footerTemplate: "Min: #= min # Max: #= max #",
+                groupHeaderTemplate: "Units In Stock: #= value # (Count: #= count#)" }
+            ]
+        });
+
+       $(".k-grid-Export").on('click', function(e){
+        var grid = $("#grid").getKendoGrid();
+        var rows = [{
+          cells: [
+            { value: "ProductName" },
+            { value: "UnitPrice" }
+          ]
+        }];
+        //var trs = $("#grid").find('tr');
+        
+         var trs = grid.dataSource;
+         
+        var filteredDataSource = new kendo.data.DataSource({
+            data: trs.data(),
+            filter: trs.filter()
+        });
+
+        filteredDataSource.read();
+        var data = filteredDataSource.view();
+         
+        for (var i = 0; i < data.length; i++) {
+         
+            var dataItem =  data[i];
+           
+            rows.push({
+              cells: [
+                { value: dataItem.ProductName },
+                { value: dataItem.UnitPrice }
+              ]
+            })
+          
+        }
+        excelExport(rows);
+         e.preventDefault();
+      });
+
+      function excelExport(rows) {
+        var workbook = new kendo.ooxml.Workbook({
+          sheets: [
+            {
+              columns: [
+                { autoWidth: true },
+                { autoWidth: true }
+              ],
+              title: "Orders",
+              rows: rows
+            }
+          ]
+        });
+        
+        kendo.saveAs({dataURI: workbook.toDataURL(), fileName: "Test.xlsx"});
+        
+      }
+      
+    </script>
+</div>
+
+
+</body>
+</html>

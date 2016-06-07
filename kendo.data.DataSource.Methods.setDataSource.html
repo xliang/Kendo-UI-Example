@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="grid"></div>
+</body>
+</html>
+<script>
+    $(function () {
+        $("#grid").kendoGrid({ 
+            scrollable: false,
+            selectable: "row",
+            columns: [
+                { field: "Brand" },
+                { field: "Model" },
+                { field: "Color" },
+                { field: "Doors" }
+            ],
+        dataSource: [{}]
+        }); 
+
+        
+    var ds = new kendo.data.DataSource({
+        data: [{"Brand":"Chevrolet","Model":"Corvette","Color":"Red","Doors": 2},
+               {"Brand":"Ford","Model":"Mustang","Color":"Blue","Doors": 2}]
+    });
+     
+    $("#grid").data("kendoGrid").setDataSource(ds);
+
+           
+    });
+</script>

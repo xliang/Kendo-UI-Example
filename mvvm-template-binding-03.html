@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        thead {
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            padding: 5px;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 5px;
+        }
+    </style>
+
+    <link href="../Content/themes/base/kendo.common.min.css" rel="stylesheet" />
+    <link href="../Content/themes/base/kendo.default.min.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.9.1.min.js"> </script>
+    <script src="../Scripts/kendo.all.min.js"></script>
+
+</head>
+<body>
+    <script id="template" type="text/x-kendo-template">
+        <tr>
+            <td>
+                <input type="checkbox" class="done" data-id="#= id #" #if(done){# checked="checked" #}#></input>
+            </td>
+            <td>
+                #= id #
+            </td>
+            <td>
+                #= description #
+            </td>
+        </tr>
+    </script>
+
+    <div id="example" class="k-content">
+        <div class="demo-section">
+            <table id="todos" class="metrotable">
+                <thead>
+                    <tr>
+                        <th>Done</th>
+                        <th>ID</th>
+                        <th>Task</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="2">
+                            Show:
+                            <select id="filter">
+                                <option selected="selected" value="all">All</option>
+                                <option value="done">Complete</option>
+                                <option value="not done">Incomplete</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var template = kendo.template($("#template").html());
+
+        // To Do Item Data
+        // ---------------
+
+        // A hard coded list of items to render
+        var tasks = [
+          { id: 1, done: false, description: "do stuff" },
+          { id: 2, done: false, description: "more stuff" },
+          { id: 3, done: true, description: "this stuff to do" },
+          { id: 4, done: false, description: "that stuff we need" }
+        ];
+
+        // Build the data source for the items
+        var dataSource = new kendo.data.DataSource({ data: tasks });
+
+        // When the data source changes, render the items
+        dataSource.bind("change", function (e) {
+            var html = kendo.render(template, this.view());
+            $("#todos tbody").html(html);
+        });
+
+        // Initial read of the items in to the data source
+        dataSource.read();
+
+        // Handle And Respond To DOM Events
+        // --------------------------------
+
+        // Handling clicking the "done" checkboxes
+        $("#todos").on("change", ".done", function (e) {
+            var $target = $(e.currentTarget);
+            var id = $target.data("id");
+            var item = dataSource.get(id);
+            item.set("done", $target.prop("checked"));
+        });
+
+        // Handle the filters for showing the desired items
+        $("#filter").change(function (e) {
+            var filterValue = $(e.currentTarget).val();
+
+            var filter = {
+                field: "done",
+                operator: "eq"
+            };
+
+            if (filterValue === "done") {
+                filter.value = true;
+            } else if (filterValue === "not done") {
+                filter.value = false;
+            } else {
+                filter = {};
+            }
+
+            dataSource.filter(filter);
+        });
+    });
+</script>   

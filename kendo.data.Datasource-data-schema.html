@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+    </style>
+
+    <link href="../Content/themes/base/kendo.common.min.css" rel="stylesheet" />
+    <link href="../Content/themes/base/kendo.default.min.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.9.1.min.js"> </script>
+    <script src="../Scripts/kendo.all.min.js"></script>
+
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+
+        /*
+            The schema object within a DataSource is responsible for describing the raw data
+            format. It functions at a higher level than the model, and can even contain a model
+            defiition within it. The Schema's job is to instruct the DataSource on where to fid
+            information on errors, aggregates, data, groups, and total records within the raw
+            data object that the DataSource is using. 
+
+            schema: {
+                errors: function(response) {
+                    return response.errors;
+                },
+                aggregates: function(response) {
+                    return response.aggregates;
+                },
+                data: function(response) {
+                    return response.data;
+                },
+                total: function(response) {
+                    return response.totalCount;
+                }
+            }
+
+
+            the schema can contain a model defiition within it. If this is the
+            case, the DataSource will call kendo.data.Model.define on the model defiition
+            for you, in order to create the model objects from the raw data:
+            
+            var dataSource = new kendo.data.DataSource({
+            schema: {
+             model: {
+                 id: "ProductID",
+                 fields: {
+                 ProductID: {
+                 editable: false,
+                 nullable: true
+             },
+             ...
+
+
+        If you have already defied a Model defiition, you can simply reference it and the
+        DataSource will use it just the same:
+
+        vardataSource = new kendo.data.DataSource({
+        schema: {
+            model: Product // Use the existing Product model
+         }
+        });
+
+     
+       The schema object has a parse property, which you can set to a function that
+        will be called before the raw data is processed. This gives you a chance to do any
+        pre-processing if you need it. There is also a type property that can be set to either
+        json or xml
+
+     */
+
+        
+    });
+</script>   

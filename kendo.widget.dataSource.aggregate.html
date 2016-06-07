@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="example" class="k-content">
+        <div id="grid"></div>
+    </div>
+</body>
+</html>
+<script>
+    $(function () {
+        $("#grid").kendoGrid({
+        dataSource: {
+            type: "odata",
+            transport: {
+                read: "http://demos.kendoui.com/service/Northwind.svc/Products"
+            },
+            pageSize: 7,
+            group: {
+                field: "UnitsInStock",
+                aggregates: [{
+                    field: "ProductName",
+                    aggregate: "count"
+                }, {
+                    field: "UnitPrice",
+                    aggregate: "sum"
+                }, {
+                    field: "UnitsOnOrder",
+                    aggregate: "average"
+                }, {
+                    field: "UnitsInStock",
+                    aggregate: "count"                    
+                }]
+            },
+
+            aggregate: [{
+                field: "ProductName",
+                aggregate: "count"
+            }, {
+                field: "UnitPrice",
+                aggregate: "sum"
+            }, {
+                field: "UnitsOnOrder",
+                aggregate: "average"
+            }, {
+                field: "UnitsInStock",
+                aggregate: "min"
+            }, {
+                field: "UnitsInStock",
+                aggregate: "max"
+            }]
+        },
+        sortable: true,
+        scrollable: false,
+        pageable: true,
+        columns: [{
+            field: "ProductName",
+            title: "Product Name",
+            footerTemplate: "Total Count: #=count#",
+            groupFooterTemplate: "Count: #=count#"
+        }, {
+            field: "UnitPrice",
+            title: "Unit Price"
+        }, {
+            field: "UnitsOnOrder",
+            title: "Units On Order",
+            footerTemplate: "Average: #=average#",
+            groupFooterTemplate: "Average: #=average#"
+        }]
+    });
+           
+    });
+</script>

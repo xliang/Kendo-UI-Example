@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id='EmployeeList'/>
+    
+</body>
+</html>
+<script>
+    $(function () {
+
+// the cascading does not work properly, 
+// check the original post http://jsfiddle.net/nKRzh/7/
+// http://www.ideatoworking.com/Blogs/ID/37/Custom-Editor-for-Kendo-UI-Grid-Column
+
+ var Model = kendo.data.Model.define({
+    id: "EmployeeID",
+    fields: {
+        EmployeeID:{editable: false, nullable: false},
+        FirstName: {type: "string"},
+        LastName: {type: "string"},
+        StateId: {type: "number"},
+        CityId: {type: "number"},
+        StateName:{type:"string"},
+        CityName:{type:"string"},
+        DOB:{type: "date"},
+        Age:{type:"number"}
+    }
+});
+
+var states = [{ Id: 1, Name: "Gujarat" }, { Id: 2, Name: "Maharastra" }, { Id: 3, Name: "MP" }, { Id: 4, Name: "UP" }];
+    var cities = [{ Id: 1, StateId: 1, Name: "Surat" }, { Id: 2, StateId: 2, Name: "Mumbai" },
+                  { Id: 3, StateId: 1, Name: "Baroda" }, { Id: 4, StateId: 2, Name: "Pune" },{Id:5,StateId:3,Name:"Ujjain"},{Id:6,StateId:4,Name:"Kanpur"}];
+
+                var employees = [{ EmployeeID: 1, FirstName: "Keyur", LastName: "Patel", StateId: 1, CityId: 1, StateName: "Gujarat", CityName: "Surat",DOB:"03/22/1983",Age:31 },
+                                 { EmployeeID: 2, FirstName: "Prasanjeet", LastName: "Debnath", StateId: 2, CityId: 2, StateName: "Maharastra", CityName: "Mumbai",DOB:"08/15/1987",Age:27 },
+                     { EmployeeID: 3, FirstName: "Namrata", LastName: "Patel", StateId: 2, CityId: 4, StateName: "Maharastra", CityName: "Pune",DOB:"09/10/1983",Age:30 }];
+
+var employeeDataSource = new kendo.data.DataSource({
+    data: employees,
+    schema:{
+        model:Model
+    },
+    transport: {
+    read: function (o) {o.success(employees);},
+    create: function (o) {
+      o.success(o.data);
+    },
+    update: function (o) { o.success(); },
+    destroy: function (o) { o.success(); }
+  },
+});
+
+var stateDataSource = new kendo.data.DataSource({
+    data: states
+});
+
+var cityDataSource = new kendo.data.DataSource({
+        data: cities
+    });
+
+var stateEditor = function(container, options) {
+        $("<input name='" + options.field + "'> ").appendTo(container).kendoDropDownList({
+            dataSource: stateDataSource,
+            dataTextField: "Name",
+            dataValueField: "Id",
+            change: function () {
+                cityDataSource.filter({
+                    field: "StateId",
+                    operator: "eq",
+                    value: parseInt(this.value())
+                });
+                $.each(states, function(index) {
+                    if (options.model.StateId == states[index].Id) {
+                        options.model.StateName = states[index].Name;
+                        if (cityDataSource.view().length > 0) {
+                            options.model.CityName = cityDataSource.view()[0].Name;
+                        } else {
+                            options.model.CityName = "";
+                        }
+                        return;
+                    }
+                });
+            }
+        });
+    };
+
+    var cityEditor = function (container, options) {
+
+        cityDataSource.filter({
+            field: "StateId",
+            operator: "eq",
+            value:options.model.StateId
+        });
+
+        $("<input name='" + options.field + "'> ").appendTo(container).kendoDropDownList({
+            dataSource: cityDataSource,
+            dataTextField: "Name",
+            dataValueField: "Id",
+            change: function () {
+                $.each(cities, function (index) {
+                    if (options.model.CityId == cities[index].Id) {
+                        options.model.CityName = cities[index].Name;
+                        return;
+                    }
+                });
+            }
+        });
+    };
+
+function defineGridColumnEditor()
+{
+    var grid = $("#EmployeeList").data("kendoGrid");
+    if(grid == null)
+        return;
+    console.log("defineGridColumnEditor");
+    
+    $.each(grid.columns,function(id,column){
+        if(column.field == "StateId")
+        {
+            column.editor = stateEditor;   
+        }
+        if (column.field == "CityId") {
+            column.editor = cityEditor;
+        }
+    });
+};
+
+$("#EmployeeList").kendoGrid({
+    dataSource: employeeDataSource,
+    columns:[
+        {
+            field:"FirstName",
+            title:"First Name"
+        },
+        /*{
+            field:"LastName",
+            title:"Last Name"
+        },*/
+        {
+            field:"StateId",
+            title:"State",template:"#=StateName#"
+        },
+        {
+            field:"CityId",
+            title:"City",template:"#=CityName#"
+        },
+        {
+            field:"DOB",
+            title:"DOB",template:"#=kendo.toString(DOB,'d')#"
+        },
+        {
+            field:"Age",
+            title:"Age"
+        },
+        {
+            command: ["edit"]
+        }
+    ],
+    editable:"inline"
+    
+});
+
+defineGridColumnEditor();
+
+
+    });
+</script>

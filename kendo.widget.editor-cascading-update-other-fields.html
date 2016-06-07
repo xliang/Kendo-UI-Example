@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     .k-grid-content .btn-group {
+      position: absolute;
+    }
+
+    .k-grid-content .btn-group .btn {  
+    top: -15px;
+    }
+    </style>
+</head>
+<body>
+    <div id="grid" style="margin-top: 15px"></div>
+</body>
+</html>
+<script>
+    $(function () {
+        // check the orignal link http://jsfiddle.net/gg7Yy/4/
+        
+        var crudServiceBaseUrl = 'http://demos.kendoui.com/service';
+var dataSource, grid;
+
+var products = [ 
+    {
+        "ProductName": "Chai",
+        "Stock": 1.0044,
+        "Price": "18.00"
+    }, {
+        "ProductName": "Chang",
+        "Stock": 3.2345,
+        "Price": "19.00"
+    }, {
+        "ProductName": "Aniseed Syrup",
+        "Stock": 0.0800,
+        "Price": "10.00"
+    }, {
+        "ProductName": "Chef Anton's Cajun Seasoning",
+        "Stock": 2.346,
+        "Price": "22.00"
+    }, {
+        "ProductName": "Chef Anton's Gumbo Mix",
+        "Stock": 2.0000,
+        "Price": "21.35"
+    }, {
+        "ProductName": "Grandma's Boysenberry Spread",
+        "Stock": 7.8364,
+        "Price": "25.00"
+}];
+
+$(document).ready(function() {
+    
+    dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: crudServiceBaseUrl + '/Products',
+                dataType: 'jsonp',
+            },
+            update:  {
+                url: crudServiceBaseUrl + '/Products/Update',
+                dataType: 'jsonp',
+            },
+            destroy: {
+                url: crudServiceBaseUrl + '/Products/Destroy',
+                dataType: 'jsonp',
+            },
+            create: {
+                url: crudServiceBaseUrl + '/Products/Create',
+                dataType: 'json',
+
+            },
+            parameterMap: function(options, operation) {
+                if (operation !== "read" && options.models) {
+                   return {models: kendo.stringify(options.models)};
+                }
+            }
+        },
+        batch: true,
+        pageSize: 30,
+            schema: {
+            model: {
+                id: 'ProductID',
+                fields: {
+                    ProductID: { editable: false, nullable: true },
+                    ProductName: { validation: { required: true } },
+                    UnitPrice: { type: "number", validation: { required: true, min: 1} },
+                    Discontinued: { type: "boolean" },
+                    UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                }
+            }
+        }
+    }); 
+
+    grid = $("#grid").kendoGrid({
+        dataSource: dataSource,
+        columns: [
+            { field: "ProductName", title: "Product", editor: productEditor, width: "150px" },
+            { field: "UnitPrice", title: "Unit Price", format: "{0:c}", width: 150 },
+            { field: "UnitsInStock", title: "Units In Stock", width: 150, format:'{0:n4}', editor: unitEditor },
+            { field: "Discontinued", width: 100 },
+          { command: [{name: 'edit', template: '<div class="btn-group"><a class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i><span class="caret"></span></a><ul class="dropdown-menu pull-right"><li><a class="k-grid-edit"><i class="icon-pencil"></i> Edit</a></li>'},{name:'delrow', template:'<li><a class="k-grid-delrow"><i class="icon-trash"></i> Delete</a></li></ul></div>'}], title: 'Actions', width: '50px' }
+        ],
+      edit: function(e) {
+        var commandCell = e.container.find("td:last");
+        commandCell.html('<div class="btn-group"><a title="Save" class="btn btn-small k-grid-update"><i class="icon-ok"></i></a><a title="Cancel" class="btn btn-small k-grid-cancel"><i class="icon-ban-circle"></i></a></div>');
+      },
+        editable: 'inline',
+    });
+
+});
+
+function productEditor(container, options)
+{
+
+    $('<input name="' + options.field + '" />')
+    .appendTo(container)
+    .kendoAutoComplete({
+        dataTextField: 'ProductName',
+        dataSource: products,
+        select: function(e){
+            var dataItem = this.dataItem(e.item.index());
+            $('.k-grid-edit-row').find('input[name=UnitPrice]').val(dataItem.Price);
+            $('.k-grid-edit-row').find('input[name=UnitsInStock]').val(dataItem.Stock);
+            options.model.UnitPrice = dataItem.Price;
+            options.model.UnitsInStock = dataItem.Stock;
+        }
+    });
+
+}
+
+function unitEditor(container, options)
+{
+    $('<input name="' + options.field + '" />')
+    .appendTo(container)
+    .kendoNumericTextBox({
+        format: "n4",
+        spinners: true,
+        step: 0.0022,
+        min: 0,
+        decimals: 4
+    });
+}
+           
+    });
+</script>

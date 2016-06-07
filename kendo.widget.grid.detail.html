@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+    </style>
+
+    <link href="../Content/themes/base/kendo.common.min.css" rel="stylesheet" />
+    <link href="../Content/themes/base/kendo.default.min.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.9.1.min.js"> </script>
+    <script src="../Scripts/kendo.all.min.js"></script>
+
+</head>
+<body>
+    <div id="demo-grid"></div>
+
+    <script id="detail-template" type="text/x-kendo-template">
+        <div>
+            <span>Phone Number for #=name#:</span>
+            <span data-bind="text: phone" />
+            <input data-bind="value: phone" />
+        </div>
+    </script>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var ds = new kendo.data.DataSource({
+            data: [
+                { name: "Joe", phone: "212-555-1234" },
+                { name: "Sally", phone: "212-999-7785" },
+                { name: "Bill", phone: "212-244-7035" }
+            ]
+        });
+
+        var scholarGrid = $("#demo-grid").kendoGrid({
+            filterable: false,
+            dataSource: ds,
+            detailTemplate: kendo.template($("#detail-template").html()),
+            detailInit: function (e) {
+                // without this line, detail template bindings will not work
+                kendo.bind(e.detailRow, e.data);
+                
+            }
+        }).data("kendoGrid");
+    });
+
+</script>   

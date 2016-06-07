@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+    <script src="people.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <label for="input" class="info">Search:</label>
+    <input id="input" />
+    <button id='clear'>clear</button>
+    <div id='grid'></div>
+
+</body>
+</html>
+<script>
+    $(function () {
+        var ds = new kendo.data.DataSource({data: createRandomData(50)});
+         //create AutoComplete UI component
+        var autoComplete = $("#input").kendoAutoComplete({
+            dataSource: ds,
+            dataTextField: 'FirstName',
+            filter: "startswith",
+            placeholder: "Search by First Name..."
+        });
+        
+        var grid = $('#grid').kendoGrid({
+            dataSource: ds,
+            columns: [
+                {field: 'FirstName', title: 'First Name'}
+            ]
+        });
+        
+        $('#clear').click(function (e) {
+            autoComplete.data("kendoAutoComplete").value("");
+            ds.filter({});
+        });
+           
+    });
+</script>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Template</title>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+</body>
+
+</html>
+<script>
+$(function() {
+    var dataSource = new kendo.data.DataSource({
+        data: [{
+            name: "Tea",
+            category: "Beverages"
+        }, {
+            name: "Coffee",
+            category: "Beverages"
+        }, {
+            name: "Ham",
+            category: "Food"
+        }],
+        pageSize: 1,
+        page: 2,
+        sort: {
+            field: "category",
+            dir: "desc"
+        }
+    });
+    dataSource.fetch(function() {
+        var view = dataSource.view();
+        var data = dataSource.data(); 
+        alert('view: ' + view.length); // displays "1"
+        alert('data: ' + data.length); // display "3"
+    });
+
+});
+</script>

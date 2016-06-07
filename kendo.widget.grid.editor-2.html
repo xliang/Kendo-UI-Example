@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="main">
+    <div id="grid" data-bind="source: dataSource"></div>
+</div>
+</body>
+</html>
+<script>
+    $(function () {
+var multiSelectEditor = function (container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoMultiSelect({
+            suggest: true,
+            dataSource: options.values
+        });
+    };
+
+    var numericEditor = function (container, options) {
+        $('<input data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoNumericTextBox({
+            decimals: 2,
+            min: 0,
+            format: 'c2'
+        });
+    };
+
+    var multiSelectArrayToString = function (item) {
+        return item.countries.join(', ');
+    };
+
+    var vm = kendo.observable({
+        countries: ['Canada', 'Mexico', 'United States'],
+        dataSource: new kendo.data.DataSource({
+            data: [{
+                id: 1,
+                product: 'X002',
+                countries: ['Mexico', 'Canada'],
+                price: 0.98
+            }, {
+                id: 2,
+                product: 'X036',
+                countries: ['United States'],
+                price: 2.96
+            }, {
+                id: 3,
+                product: 'X098',
+                countries: [],
+                price: 45.90
+            }, ],
+            schema: {
+                model: {
+                    id: 'id',
+                    fields: {
+                        'id': {
+                            type: 'number'
+                        },
+                            'product': {
+                            type: 'string'
+                        },
+                            'countries': {},
+                            'price': {
+                            type: 'number'
+                        }
+                    }
+                }
+            }
+        }),
+    });
+
+    $('#grid').kendoGrid({
+        columns: [{
+            command: 'edit',
+            width: '120px',
+        }, {
+            field: 'product'
+        }, {
+            field: 'countries',
+            editor: multiSelectEditor, // function that generates the multiSelect control
+            values: vm.countries, // custom property with array of values
+            template: multiSelectArrayToString // template: how to display text in grid
+        }, {
+            field: 'price',
+            editor: numericEditor,
+            format: '{0:c}'
+        }],
+        editable: 'inline',
+
+    });
+
+    kendo.bind('#main', vm);
+
+           
+    });
+</script>

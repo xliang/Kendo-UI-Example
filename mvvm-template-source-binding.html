@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+    </style>
+
+    <link href="../Content/themes/base/kendo.common.min.css" rel="stylesheet" />
+    <link href="../Content/themes/base/kendo.default.min.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.9.1.min.js"> </script>
+    <script src="../Scripts/kendo.all.min.js"></script>
+
+</head>
+<body>
+    <div data-bind="source: data" data-template="tmp"></div>
+
+    <script id="tmp" type="text/x-kendo-template">
+        <div>
+            <input data-bind="value: quantity" />
+            <span data-bind="text: price"></span>
+            <span data-bind="text: total"></span>
+        </div>
+    </script>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var Product = kendo.data.Model.define({
+            fields: {
+                "quantity": {
+                    type: "number"
+                },
+                "price": {
+                    type: "number"
+                }
+            },
+            total: function () { //define the calculated field
+                return this.get("quantity") * this.get("price");
+            }
+        });
+
+        var viewModel = kendo.observable({
+            data: [
+              new Product({ "quantity": 1, "price": 2 })
+            ]
+        });
+        kendo.bind($(document.body), viewModel);
+    });
+</script>   

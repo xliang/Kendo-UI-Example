@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+        .container label {
+            display: inline-block;
+            width: 80px;
+        }
+
+        .container li {
+          padding-bottom: 5px;    
+        }
+
+        .container {
+           background-color: #eeeeee;
+           width: 400px; 
+           padding: 10px;  
+        }
+        .selector {
+            padding: 10px;
+            width: 400px;
+            background-color: #D75B26;
+        }
+    </style>
+     <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+</head>
+<body>
+    <div class="selector">
+        Edit Product: <input type="text" id="products" />
+    </div>
+
+    <div id="container" class="container">
+        <ul>
+            <li><label>ID</label> <span data-bind="text: ProductID"></span></li>
+            <li><label>Name</label> <input type="text" id="products" class="k-textbox" data-bind="value: ProductName" /></li>
+            <li><label>UnitPrice</label> <input type="text" data-role="numerictextbox" data-bind="value: UnitPrice" /></li>
+        </ul>
+        <button id="save">Save</button>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+
+        var crudServiceBaseUrl = "http://demos.kendoui.com/service",
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                        read: {
+                            url: crudServiceBaseUrl + "/Products",
+                            dataType: "jsonp"
+                        },
+                        update: {
+                            url: crudServiceBaseUrl + "/Products/Update",
+                            dataType: "jsonp"
+                        },
+                        // function which converts the request parameters to a format suitable for remote service
+
+                        parameterMap: function (options, operation) {
+                            if (operation !== "read" && options.models) {
+                                return {
+                                    models: kendo.stringify(options.models)
+                                };
+                            }
+                        }
+                },
+                batch: true,
+                schema: {
+                    model: {
+                        id: "ProductID",
+                        fields: {
+                            ProductID: {
+                                editable: false,
+                                nullable: true
+                            },
+                            ProductName: { type: "string" },
+                            UnitPrice: { type: "number" }
+                        }
+                    }
+                }
+            });
+
+        $("#products").kendoDropDownList({
+            dataSource: dataSource,
+            dataTextField: "ProductName",
+            dataValueField: "ProductID",
+            change: function () {
+                var model = dataSource.get(this.value());
+                kendo.bind($("#container"), model);
+            }
+        }).data("kendoDropDownList")
+            .one("dataBound", function () {
+              // binding ... 
+              kendo.bind($("#container"), dataSource.view()[0]);
+          });
+
+
+        $("button").click(function () {
+            dataSource.sync();
+        });
+
+    });
+
+</script>   

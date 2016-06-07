@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <!--
+
+     Kendo DataSource
+
+       - Model
+
+         from the namespace kendo.data.Model, inherits from Kendo's OberservableObject
+         It provides a known structure, or model to the data that is used by a DataSource and can also be used to enable some more advanced
+         functionality such as change tracking.
+
+         var Service = kendo.data.Model.define( {
+           id: "serviceId", // the identifier of the model
+           fields: {
+               "serviceName": {
+                   type: "string", // "string"(default), "number", "boolean", or "date"
+                   defaultValue: "Inspection", // Default value for field when model is
+                                               // created. Default for string is "", number
+                                               // is 0, and date is new Date() (.i.e. today)
+                   editable: true, // Specifies whether field is editable
+                   nullable: false, // Specifies if default value should be used when empty
+                   parse: function(){...} // Specifies custom parser for field value
+                   validation: {
+                       required: true,
+                       min: 1
+                   } 	// Specifies the validation options used by Kendo
+                                    // Validator such as 'required', 'min', and 'max'.
+
+               },
+               "unitPrice": {
+                   type: "number"
+               },
+               "serviceId": {
+                   type: "number"
+               }
+            }
+           });
+
+           var currentService = new Service( {
+               serviceName: "Rotate Tires",
+               unitPrice: 29.95,
+               serviceId: 400
+           });
+
+           // model.get
+           console.log(currentService.get("serviceName")); // outputs "Rotate Tires"
+           console.log(currentService.get("unitPrice")); // outputs 29.95
+
+           // Two other methods available on model objects are isNew and toJSON.
+           // The isNew method checks if the model is new or not. This is determined by whether or not the id fild is still set at the default value.
+           // If the id fild is not set at the default value, the model object is not considered new.
+           // The toJSON method returns a JSON representation of the complete model's properties and values.
+
+           // Since, as I mentioned, the model inherits from ObservableObject, it exposes three events to which you can attach custom behaviors
+           // — change, get, and set.
+           // The syntax for these is to use model.bind()  with the name of the event and a function to handle it:
+
+           currentService.bind('change', function(e){
+               alert(e.field + " just changed its value to " +
+               currentService.get([e.field]));
+           });
+
+       - Schema
+         describing the raw data format, It functions at a higher level thatn the model
+         can contain a model definition within it. The Schema's job is to instruct the DataSource
+         On where to find information on errors, aggregates, adata, groups, and total records within the raw
+         data object that the DataSource is using. Each of those pieces of information exists as property within the schema object like this
+
+         schema: {
+            model: {
+            }
+            errors: function(response) {
+               return response.errors;
+            },
+            aggregates: function(response) {
+               return response.aggregates;
+            },
+            data: function(response) {
+               return response.data;
+            },
+            total: function(response) {
+               return response.totalCount;
+            }
+            parse: {
+               // will called before the raw data is processed.
+               // do any pre-processing if you needed
+            }
+
+            type: json or xml
+       }
+
+       - Transport
+
+         Use to communicate within a remote server for any of its normal data functions. Those data functions are
+         create, destroy, read, and update
+
+         transport: {
+            create: { // this sets configuration for creating new records
+                      // on the remote server
+               url: "/orders/create",
+               data: {
+                     // data to send to the create service as part of the request.
+                   orderId: $("#input").val();
+               },
+               cache : true // make false to force requests every time.
+               contentType: "application/json",
+               dataType: "json",
+               type: "POST" // which http verb to use
+            },
+            destroy: { // this sets configuration for deleting records
+                       // on the remote server
+            },
+            read: { // this sets configuration for reading records
+                    // from the remote server
+               $.ajax( {
+                   url: "/orders/destroy",
+                   data: options.data, // the data field contains paging, sorting,
+                       // filtering, and grouping data
+                   success: function(result) {
+                       // notify the DataSource that the operation is complete
+                       Options.success(result);
+                   }
+               });
+
+
+            },
+            update: { // this sets configuration for updating records
+                       // on the remote server
+            },
+            autoSync: false, // set true to automatically sync all changes
+            batch: false // set true to enable batch mode
+       }
+
+    -->
+</body>
+</html>

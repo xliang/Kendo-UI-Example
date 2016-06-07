@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="grid"></div>
+</body>
+</html>
+<script>
+    $(function () {
+          var grid = $("#grid").kendoGrid({
+                dataSource: {
+                    requestEnd: function(e) {
+                        var response = e.response;
+                        var type = e.type;
+                        if(response.result == "Fail"){
+                            alert("[ERROR]:"+response.error_msg);   
+                        }
+                      },
+                    type: "odata",
+                    transport: {
+                        read: "http://demos.kendoui.com/service/Northwind2.svc/Orders"
+                    },
+                    pageSize: 10,
+                    serverPaging: true        
+                },
+                height: 250,
+                pageable: true,
+                columns: ["OrderID","Freight","ShipName","ShipCity"]    
+            }).data("kendoGrid");
+
+        var dataSource = grid.dataSource;
+
+        grid.wrapper.find(".k-pager")
+            .before('<a href="#" class="k-link prev">Prev</a>')
+            .after('<a href="#" class="k-link next">Next</a>')    
+            .parent()
+            .append('<span class="pagesize" style="margin-left:40px">Page To: <input /></span>')
+            .delegate("a.prev", "click", function() {
+                dataSource.page(dataSource.page() - 1);
+            })
+            .delegate("a.next", "click", function() {
+               dataSource.page(dataSource.page() + 1);
+            })
+            .delegate(".pagesize input", "change", function() {
+               dataSource.page(parseInt(this.value, 10));
+            })
+
+           
+    });
+</script>

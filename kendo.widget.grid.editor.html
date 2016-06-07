@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="grid"></div>
+    <a href="#" id="showData">Show Data</a>
+    <code id="dataDetails">
+    </code>
+</body>
+</html>
+<script>
+    $(function () {
+            var sourceData = [
+    { Position: 'One', Simple: 'foo', Complex: { Login: 'foo', Description: 'foo - Foo Frye' } },
+    { Position: 'Two', Simple: 'bar', Complex: { Login: 'bar', Description: 'bar - Bar River' } },
+    { Position: 'Three', Simple: 'bar', Complex: { Login: 'bar', Description: 'bar - Bar River' } },
+    { Position: 'Four', Simple: 'baz', Complex: { Login: 'baz', Description: 'baz - Jayne Baz' } },
+];
+
+var nameList = [
+    { Login: 'foo', Description: 'foo - Foo Frye' },
+    { Login: 'bar', Description: 'bar - Bar River' },
+    { Login: 'baz', Description: 'baz - Jayne Baz' },
+    { Login: 'zoom', Description: 'zoom - Zoe Zoom' },
+    ];
+
+var mySimpleEditor = function(container, options) {
+    var ed = $('<select ' +
+            ' data-bind=" source: listSource.list, value: ' + options.field + '" ' +
+            ' data-text-field="Description" ' +
+            ' data-value-field="Login" ' + 
+            ' />')
+    options.model.listSource = kendo.observable({list: nameList})
+    ed.appendTo(container);       
+}
+var myComplexEditor = function(container, options) {
+    var ed = $('<select ' + 
+            ' data-text-field="Description" ' + 
+            ' data-bind=" source: listSource.list, value: ' + options.field + '" />')
+    options.model.listSource = kendo.observable({list: nameList})
+    ed.appendTo(container)
+}
+$('#grid').kendoGrid({
+    dataSource: {
+        data: sourceData,
+        schema: {
+            model: {
+                fields: {
+                    Position: { type: 'string' },
+                    Simple: { type: 'string' },
+                    Complex: { type: 'object' },
+                },
+            }
+        }
+    },
+    editable: true, 
+    columns: [
+        { field: 'Position' },
+        {
+            field: 'Simple',
+            editor: mySimpleEditor,
+        },
+    
+        {
+            field: 'Complex',
+            template: '#=Complex.Description#',
+            editor: myComplexEditor,
+        },
+    ]
+});
+
+$('#showData').on('click', function() {
+    var data = $('#grid').data('kendoGrid').dataSource.data();
+    console.log(data);
+    $('#dataDetails').text(JSON.stringify(data));
+})    
+
+           
+    });
+</script>

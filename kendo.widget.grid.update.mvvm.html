@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="content">
+    <div>
+        <div id="grid" data-role="grid" data-bind="source: ordersSource, events: { change: change }"
+                        data-selectable="True" data-columns='["OrderID", "ShipName", "ShipCity"]' />
+    </div>
+    <div style="margin: 10px" data-bind="visible: selectedRow">
+        <h2>Edit client</h2>
+        <label>Order id</label>
+        <input type="text" readonly="true" data-bind="value: selectedRow.OrderID" />
+        <br />
+        <label>Ship Name</label>
+        <input type="text" data-bind="value: selectedRow.ShipName" />
+        <br />
+        <label>Ship City</label>
+        <input type="text" data-bind="value: selectedRow.ShipCity" />
+    </div>                                
+</div>
+
+</body>
+</html>
+<script>
+    $(function () {
+            var ordersDatasource = new kendo.data.DataSource({
+            type: "odata",
+            transport: {
+                read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
+            },
+            schema: {
+                model: {
+                    id: "OrderID",
+                    fields: {
+                        OrderID: { type: "number" },
+                        ShipName: { type: "string" },
+                        ShipCity: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 5,
+        });
+
+        var viewModel = kendo.observable({
+            ordersSource: ordersDatasource,
+            selectedRow: null,
+
+            change: function(eventArgs) {
+                this.set("selectedRow", eventArgs.sender.dataItem(eventArgs.sender.select()));
+            }
+        });
+
+        kendo.bind($('#content'), viewModel);
+
+           
+    });
+</script>

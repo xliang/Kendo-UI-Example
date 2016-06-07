@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    category: <input id="category" />
+    product: <input id="product" />
+
+</body>
+</html>
+<script>
+    $(function () {
+        var category = $("#category").kendoDropDownList({
+    optionLabel: "Select category...",
+    dataSource: [
+        { CategoryID: 1, CategoryName: "Beverages" },
+        { CategoryID: 2, CategoryName: "Condiments" },
+        { CategoryID: 3, CategoryName: "Confections" }
+    ],
+    dataValueField: "CategoryID",
+    dataTextField: "CategoryName"
+}).data("kendoDropDownList");
+
+var product = $("#product").kendoDropDownList({
+    optionLabel: "Select product...",
+    dataSource: [
+        {"ProductID":1,"ProductName":"Chai","CategoryID":1},
+        {"ProductID":2,"ProductName":"Chang","CategoryID":1},
+        {"ProductID":24,"ProductName":"Guaraná Fantástica","CategoryID":1},
+        {"ProductID":34,"ProductName":"Sasquatch Ale","CategoryID":1},
+        {"ProductID":35,"ProductName":"Steeleye Stout","CategoryID":1},
+        {"ProductID":3,"ProductName":"Aniseed Syrup","CategoryID":2},
+        {"ProductID":4,"ProductName":"Chef Anton's Cajun Seasoning","CategoryID":2},
+        {"ProductID":5,"ProductName":"Chef Anton's Gumbo Mix","CategoryID":2},
+        {"ProductID":6,"ProductName":"Grandma's Boysenberry Spread","CategoryID":2},
+        {"ProductID":8,"ProductName":"Northwoods Cranberry Sauce","CategoryID":2},
+        {"ProductID":16,"ProductName":"Pavlova","CategoryID":3},
+        {"ProductID":19,"ProductName":"Teatime Chocolate Biscuits","CategoryID":3},
+        {"ProductID":20,"ProductName":"Sir Rodney's Marmalade","CategoryID":3},
+        {"ProductID":21,"ProductName":"Sir Rodney's Scones","CategoryID":3},
+        {"ProductID":25,"ProductName":"NuNuCa Nuß-Nougat-Creme","CategoryID":3}                
+    ],
+    dataValueField: "ProductID",
+    dataTextField: "ProductName",
+    cascadeFrom: "category"
+}).data("kendoDropDownList");
+
+category.value("2");
+product.value("8");
+           
+    });
+</script>

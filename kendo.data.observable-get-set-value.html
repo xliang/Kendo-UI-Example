@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+    </style>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+
+        
+        // creating a new ObservableObject via its constructor
+        var viewModel = kendo.observable({
+            person: {
+                name : "John Doe"
+            }
+        });
+
+        // get the data from view model
+
+        var personName = viewModel.get("person.name");
+        alert(personName);
+
+        // set the data 
+
+        viewModel.set("person.name", "liang");
+
+        var personName2 = viewModel.get("person.name");
+        alert(personName2);
+        
+        // using the kendo.observable method
+
+        var observable = new kendo.data.ObservableObject({ name: "John2 Doe" });
+        alert(observable.name); 
+        alert(observable.uid); 
+
+        // bind 
+        observable.bind("change", function (e){
+            alert(e.field); 
+        }); 
+
+        observable.set("name", "Mike"); 
+
+        // toJSON
+        var json = observable.toJSON(); 
+
+        alert(json);
+
+        alert(JSON.stringify(json)); 
+
+    });
+</script>   

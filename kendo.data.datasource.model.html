@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+    </style>
+
+    <link href="../Content/themes/base/kendo.common.min.css" rel="stylesheet" />
+    <link href="../Content/themes/base/kendo.default.min.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.9.1.min.js"> </script>
+    <script src="../Scripts/kendo.all.min.js"></script>
+
+</head>
+<body>
+    <div id="people">
+        <div data-role="grid"
+             data-bind="source: people"
+             data-editable="true"
+             data-columns='[{"field": "firstName", "title": "First Name"},
+                        {"field": "lastName", "title": "Last Name"},
+                        {"field": "lastUpdated", "title": "Full Name", "template": "#= fullName() #"}]'>
+        </div>
+    </div>
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var Person = kendo.data.Model.define({
+            fields: {
+                "firstName": {
+                    type: "string"
+                },
+                "lastName": {
+                    type: "string"
+                },
+                "lastUpdated": {
+                    type: "date",
+                    editable: false
+                }
+            },
+            fullName: function () {
+                return this.get("firstName") + " " + this.get("lastName");
+            }
+        });
+
+        // Define a DataSource
+        var peopleDataSource = new kendo.data.DataSource({
+            data: [
+                { id: 1, firstName: "John", lastName: "DeVight" },
+                { id: 2, firstName: "Wendy", lastName: "Parry" }
+            ],
+            schema: {
+                model: Person
+            }
+        });
+
+        peopleDataSource.bind("change", function (e) {
+            if (e.action === "itemchange") {
+                if (e.field === "firstName" || e.field === "lastName") {
+                    e.items[0].dirty = true;
+                    kendo.data.ObservableObject.fn.set.call(e.items[0], "lastUpdated", new Date());
+                }
+            }
+        });
+
+        // Create the ViewModel.
+        var vm = kendo.observable({
+            people: peopleDataSource
+        });
+
+        kendo.bind($("#people"), vm);
+    });
+</script>   

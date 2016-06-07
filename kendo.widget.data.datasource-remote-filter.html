@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        p {
+            color: blue;   
+        }
+    </style>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+</head>
+<body>
+    <div id="grid"></div>
+    <br />
+    <p>Filter :: [ {[ Freight = 11.61 OR Freight = 51.30 ]} AND {[ City startswith "Charleroi" ]} ]</p>
+    <input type="button" id="btnFilter" value="Filter" />
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $("#btnFilter").on("click", function (e) {
+            var ds = $("#grid").data("kendoGrid").dataSource;
+            ds.filter([
+                {
+                    "logic": "or",
+                    "filters": [
+                        {
+                            "field": "Freight",
+                            "operator": "eq",
+                            "value": 11.61
+                        },
+                        {
+                            "field": "Freight",
+                            "operator": "eq",
+                            "value": 51.3
+                        }
+                    ]
+                },
+                {
+                    "field": "ShipCity",
+                    "operator": "startswith",
+                    "value": "Char"
+                }
+            ]);
+        });
+
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "odata",
+                transport: {
+                    read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
+                },
+                schema: {
+                    model: {
+                        fields: {
+                            OrderID: { type: "number" },
+                            Freight: { type: "number" },
+                            ShipName: { type: "string" },
+                            OrderDate: { type: "date" },
+                            ShipCity: { type: "string" }
+                        }
+                    }
+                },
+                pageSize: 10,
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+            filterable: true,
+            sortable: true,
+            pageable: true,
+            columns: [{
+                field: "OrderID",
+                filterable: false
+            },
+                "Freight",
+                {
+                    field: "OrderDate",
+                    title: "Order Date",
+                    width: 100,
+                    format: "{0:MM/dd/yyyy}"
+                }, {
+                    field: "ShipName",
+                    title: "Ship Name",
+                    width: 200
+                }, {
+                    field: "ShipCity",
+                    title: "Ship City"
+                }
+            ]
+        });
+    });
+</script>   

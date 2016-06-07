@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Template
+        </title>
+        <link href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" rel="stylesheet"/>
+        <link href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" rel="stylesheet"/>
+        <link href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" rel="stylesheet"/>
+        <link href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" rel="stylesheet"/>
+        <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js">
+        </script>
+        <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js">
+        </script>
+        <style type="text/css">
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
+<script>
+    $(function () {
+            var dataSource = new kendo.data.DataSource({
+  transport: {
+    read: function(options) {
+      $.ajax({
+        url: "http://demos.telerik.com/kendo-ui/service/products",
+        dataType: "jsonp",
+        success: function(result) {
+          console.log("successfully read.");
+          options.success(result);
+        }
+      });
+    },
+    destroy: function (options) {
+      // make JSONP request to http://demos.telerik.com/kendo-ui/service/products/destroy
+      $.ajax({
+        url: "http://demos.telerik.com/kendo-ui/service/products/destroy",
+        dataType: "jsonp", // "jsonp" is required for cross-domain requests; use "json" for same-domain requests
+        // send the destroyed data items as the "models" service parameter encoded in JSON
+        data: {
+          models: kendo.stringify(options.data.models)
+        },
+        success: function(result) {
+          // notify the data source that the request succeeded
+          console.log("successfully deleted"); 
+          options.success(result);
+        },
+        error: function(result) {
+          // notify the data source that the request failed
+          options.error(result);
+        }
+      });
+    }
+  },
+  batch: true,
+  schema: {
+    model: { id: "ProductID" }
+  }
+});
+    dataSource.fetch(function() {
+      var products = dataSource.data();
+      dataSource.remove(products[0]);
+      dataSource.sync();
+    });
+
+           
+    });
+</script>

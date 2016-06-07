@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <input id="autocomplete" />
+    <div id="result"></div>
+</body>
+</html>
+<script>
+    $(function () {
+        $("#autocomplete").kendoAutoComplete({
+            dataTextField: "Txt",
+            select: function(e) {
+                var dataItem = this.dataItem(e.item.index());
+                
+                //output selected dataItem
+                $("#result").html(kendo.stringify(dataItem));       
+            },
+            dataSource: {
+                data: [
+                    { Txt : "GB1", value: 1 },
+                    { Txt : "GB2", value: 2 },
+                    { Txt : "GB3", value: 3 },
+                    { Txt : "GB4", value: 4 }
+                ]
+            }
+        });
+           
+    });
+</script>

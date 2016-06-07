@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+        <form id="myForm" method="POST">
+            <p>The field must match</p>
+            
+            <input id="value1" name="value1" type="text" data-bind="value: value1" required /><br />
+            
+
+            <input id="value2" name="value2" data-matches="value1" data-matches-msg="The fields don't match" type="text" data-bind="value: value2" required /><br />
+                      
+            
+            <button data-bind="click: onClick">Submit</button>
+        </form>
+
+</body>
+</html>
+<script>
+$(function () {
+        (function () {
+            // define a global name spce for validation rules
+            window.app = {
+                validators: {
+                    matchesValidator: function (input) {
+                        var matchesPropertyName = input.data("matches");
+                        if (!matchesPropertyName) return true;
+
+                        var propertyName = input.prop("kendoBindingTarget").toDestroy[0].bindings.value.path;
+                        var model = input.prop("kendoBindingTarget").source;
+                        var value = model[propertyName];
+                        var matchesValue = model[matchesPropertyName];
+
+                        return (value === matchesValue);
+                    },
+
+                    // customized one 
+                    emailValidator : function (input) {
+                        return true; 
+                    }
+                }
+            };
+
+            var init = function (view, vm) {
+            
+            // apply the validator to the view  (seperated concern)
+                       
+            view.kendoValidator({
+                rules: {
+                    // select the validation rule
+                    matches: app.validators.matchesValidator
+                },
+                messages: {
+                    email: "That does not appear to be a valid email address",
+                    matches: function (input) {
+                        return input.data("matchesMsg") || "Default error message";
+                    }
+                }
+            });
+            
+            // kendo MVVM data binding 
+            kendo.bind(view, viewModel);
+        };
+
+        // define a viewModel with properties and methods 
+        var viewModel = kendo.observable({
+                value1: "",
+                value2: "",
+
+                onClick: function (e) {
+                    // find the validation control and run the validation 
+                    var validator = $(e.target).closest("[data-role=validator]").data("kendoValidator");
+
+                if (validator && validator.validate()) {
+                    e.preventDefault();
+                }
+            }
+        });
+        
+        // run the application 
+        init($("#myForm"), viewModel);
+
+    })()
+
+           
+});
+</script>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
+
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+    <div id="grid"></div>
+</body>
+</html>
+<script>
+    $(function () {
+$("#grid").kendoGrid({
+      dataSource: [
+        { ServiceType: "Aaaa", Rate: 1 },
+        { ServiceType: "Aaaa", Rate: 1 },
+        { ServiceType: "Caaa", Rate: 3 },
+      ],
+      toolbar: ["create"],
+      scrollable: false,
+      editable: true,
+      columns: [{
+        field: "ServiceType",
+        title: "Service/Items",
+        editor: serviceItemAutoCompleteEditor
+      },
+      {
+        field: "Rate",
+        title: "Unit price"
+      }]
+    });
+    
+    
+    function serviceItemAutoCompleteEditor(container, options) {
+      $('<input data-text-field="ShortDescription" data-value-field="ShortDescription" data-bind="value:' + options.field + '"/>')
+      .appendTo(container)
+      .kendoAutoComplete({
+        autoBind: false,
+        suggest: true,
+        placeholder: "Select an item",
+        filter: "contains",
+        index: 1,
+        minLength: 1,
+        dataSource: {
+          data: [
+            { ShortDescription: "Aaaa" },
+            { ShortDescription: "Bbbb" },
+            { ShortDescription: "Cccc" },
+            { ShortDescription: "Aabb" },
+            { ShortDescription: "Aaab" },
+            { ShortDescription: "Bbbc" },
+            { ShortDescription: "Caaa" }
+          ]
+        }
+      });
+    }
+
+           
+    });
+</script>

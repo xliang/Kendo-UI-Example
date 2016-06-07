@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+   <!-- 
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+    <script src="E:\cloud\Dropbox\dev\samples\_web.javascript.telerik\_07.Telerik\_bower\bower_components\kendo-ui-core\src\js\kendo.core.js"></script>
+-->    
+    <style type="text/css">
+     
+    </style>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    $(function () {
+
+        var extend = $.extend;
+
+        function Class() {
+        }
+
+        Class.extend = function (proto) {
+            var base = function () {
+                }, member, that = this; 
+            
+            var subclass = proto && proto.init ? proto.init : function () {
+                    that.apply(this, arguments);
+                }; 
+
+            var fn;
+            
+            base.prototype = that.prototype;
+              fn = subclass.fn = subclass.prototype = new base();
+            for (member in proto) {
+                if (proto[member] != null && proto[member].constructor === Object) {
+                    fn[member] = extend(true, {}, base.prototype[member], proto[member]);
+                } else {
+                    fn[member] = proto[member];
+                }
+            }
+            fn.constructor = subclass;
+            subclass.extend = that.extend;
+            return subclass;
+        };
+
+        
+        var Person = Class.extend({
+            firstName: 'Not Set',
+            lastName: 'Not Set',
+            isAPrettyCoolPerson: false,
+            sayHello: function() {
+                alert("Hello! I'm " + this.firstName + " " + this.lastName);
+            }
+        });
+
+        var person = new Person();
+
+        person.sayHello();
+        
+        /*
+        var Person2 = Class.extend({
+            firstName: 'Not Set',
+            lastName: 'Not Set',
+            isAPrettyCoolPerson: false,
+            init: function(firstName, lastName) {
+                if (firstName) this.firstName = firstName;
+                if (lastName) this.lastName = lastName;
+            },
+            sayHello: function() {
+                alert("Hello! I'm " + this.firstName + " " + this.lastName);
+            }
+        });
+
+        var person2 = new Person2("John", "Bristowe");
+        person2.isAPrettyCoolPerson = true;
+        person2.sayHello();
+
+        
+        var Parent = Person2.extend({
+            firstName: 'Mark',
+            lastName: 'Holland'
+        });
+
+        var myDad = new Parent();
+        myDad.isAPrettyCoolPerson = true;
+        myDad.sayHello();
+        alert(myDad.isAPrettyCoolPerson);
+
+        var Child = Parent.extend({});
+        var me = new Child();
+        me.firstName = "Burke";
+        me.sayHello();
+        alert(me.isPrettyCoolPerson);
+    */
+    });
+
+</script>

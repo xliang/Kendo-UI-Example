@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Template</title>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div id="grid">
+</body>
+
+</html>
+<script>
+/*
+        make the grid readonly from grid
+        ususally it is controlled on dataSource
+    */
+$(function() {
+
+    var gridWidget = null;
+
+    var readonlyEditor = function(container, options) {
+        // stop editing the table cell which is in edit mode. 
+        gridWidget.closeCell();
+    };
+
+    var dataSource = new kendo.data.DataSource({
+        data: [{
+            id: 1,
+            name: "Bob"
+        }, {
+            id: 2,
+            name: "Joe"
+        }],
+        batch: true,
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: {
+                        type: "number",
+                        editable: false,
+                        nullable: false
+                    },
+                    name: {
+                        type: "string",
+                        editable: true
+                    }
+                }
+            }
+        }
+    });
+
+    // name is uneditable 
+    gridWidget = $("#grid").kendoGrid({
+        dataSource: dataSource,
+        height: 200,
+        toolbar: ["save", "cancel"],
+        columns: [{
+            field: "id",
+            title: "Id",
+            width: 80
+        }, {
+            field: "name",
+            title: "Name",
+            editor: readonlyEditor
+        }, {
+            command: "destroy",
+            title: " ",
+            width: 120
+        }],
+        editable: true
+    }).data("kendoGrid");
+
+});
+
+</script>

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+      html {
+            font: 13px sans-serif;
+        }
+    </style>
+
+       <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+</head>
+<body>
+    <div id="grid"></div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var total = 1000;
+
+        function getData(length, delay) {
+            var data = [];
+            for (var j = 1; j <= length; j++) {
+                data[j - 1] = {
+                    id: j, firstName: "First Name " + j, lastName: "Last Name " + j, phone: "00000" + j, email: "email" + j + "@server.com"
+                };
+            }
+            return {
+                json: JSON.stringify({
+                    data: data,
+                    total: total
+                }),
+                delay: delay
+            };
+        }
+
+        /*
+            Unfinished, how to create JSONP string ??
+        */
+        $("#grid").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "http://jsfiddle.net/echo/jsonp/",
+                        type: "post",
+                        dataType: "jsonp",
+                        contentType: 'application/json',
+                        jsonpCallback: 'json',
+                        data: getData(20, 4)
+                    }
+                },
+                pageSize: 20,
+                serverPaging: true,
+                schema: {
+                    data: "data",
+                    total: "total"
+                }
+            },
+            height: 400,
+            columns: [
+                { field: "lastName", title: "Last Name" },
+                { field: "firstName" },
+                { field: "phone" },
+                { field: "email" }],
+            pageable: true
+        });
+    });
+</script>   

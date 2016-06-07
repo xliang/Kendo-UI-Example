@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+    </style>
+
+       <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        /*
+
+        The transport object contains properties that a DataSource can use to communicate
+        with a remote server for any of its normal data functions. Those data functions are
+        create, destroy, read, and update (corresponding to the different actions that can
+        be taken on a record). Each of these data functions exists as a property object within
+        the transport object and follows the same pattern of confiuration options. 
+
+        create: { 
+            // for creating data records on remote source.
+            url: "/orders/create", // the url to the create service.
+            data: { 
+                // data to send to the create service as part of the request.
+                // this can also be specified as a function call.
+                orderId: $("#input").val()
+            },
+            cache: true, // make false to force fresh requests every time.
+            contentType: "application/json", 
+            // default is
+            // "application/w-www-form-urlencoded"
+            dataType: "json", // "jsonp" is also common.
+            type: "POST" // which http verb to use.
+        }
+
+        destroy: { 
+         // same options as "create", with some alternatives shown.
+         // this is how you use $.ajax() to run this remote service call.
+         // this option can be used with "create", "destroy", "read",
+         // and "update"
+         
+         $.ajax( {
+            url: "/orders/destroy",
+            data: options.data, // the data field contains paging, sorting,
+            // filtering, and grouping data
+            success: function(result) {
+            // notify the DataSource that the operation is complete
+                Options.success(result);
+            }
+           });
+        }
+
+
+        // DataSoure Method 
+
+        // fetches data using the current filter/sort/group/paging
+        information.
+        // will fetch data from transport if data is not already available in
+        memory.
+       
+       dataSource.fetch(); // can optionally take a callback function which
+         
+       // is executed once the data is ready.
+       // executes a query over the data (i.e. paging/sorting/filtering/grouping)
+       // this effects what the call to dataSource.view() will return.
+      
+      dataSource.query({ page: 5, pageSize: 20, group:{field:'year',dir:'asc'}});
+      
+      // read data into the DataSource using the transport.read setting
+      
+      dataSource.read(); // also conveniently causes the change event to fire
+
+      // synchronizes changes through the transport for any pending CRUD operations.
+      // if batch mode is enabled, it uses only one call per operation type (create,
+      // read, update, destroy)
+        
+        dataSource.sync();
+        
+      // discards all un-synced changes made to the DataSource
+       
+       dataSource.cancelChanges();
+      
+      // returns the current state of the items in the DataSource with all applied
+      // settings such as paging, sorting, filtering, and grouping.
+      // to ensure that data is available, this method should be used from
+      // within the change event of the DataSource
+        
+       change: function(e){
+         ...
+        kendo.render(template, dataSource.view());
+        }
+
+
+      */
+    });
+</script>   

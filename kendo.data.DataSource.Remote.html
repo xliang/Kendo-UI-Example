@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+    <style type="text/css">
+      
+    </style>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+
+
+</head>
+<body>
+    <div id="example">
+
+
+        <div class="box wide">
+            <h4>Configure</h4>
+            <ul class="options">
+                <li>
+                    <label for="page">Page:</label>
+                    <input type="text" value="1" id="page" class="k-textbox" />
+                </li>
+                <li>
+                    <label for="order">Order by:</label>
+                    <select id="order">
+                        <option value="ProductID">ID</option>
+                        <option value="ProductName">Name</option>
+                        <option value="UnitPrice">Price</option>
+                    </select>
+                </li>
+                <li>
+                    <label for="dir">Direction:</label>
+                    <select id="dir">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </li>
+                <li>
+                    <button class="k-button" id="apply" style="margin-left: 74px;">Apply</button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="demo-section k-content wide">
+            <ul id="products"></ul>
+        </div>
+
+        <script id="template" type="text/x-kendo-template">
+            <li class="product">
+                <img src="assets/foods/${ProductID}.jpg" alt="${ProductName} image" />
+                <h3>#:ProductName#</h3>
+                <p>#:kendo.toString(UnitPrice, "c")#</p>
+            </li>
+        </script>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        // create a template using the above definition
+        var template = kendo.template($("#template").html());
+
+        var dataSource = new kendo.data.DataSource({
+            type: "odata",
+            serverPaging: true,
+            serverSorting: true,
+            pageSize: 12,
+            transport: {
+                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
+            },
+            // invoked when jquery ajax updates successfully. 
+            // the success event is overirden by transport options.success 
+
+            change: function () {
+                // subscribe to the CHANGE event of the data source
+                // update the max attribute of the "page" input
+                $("#page").attr("max", this.totalPages());
+
+                $("#products").html(kendo.render(template, this.view()));
+            }
+        });
+
+        // read data from the remote service
+        dataSource.read();
+
+        $("#apply").on("click", function () {
+            var page = parseInt($("#page").val(), 10);
+
+            // validate the page - it must be a number within the allowed range
+            if (isNaN(page) || page < 1 || page > dataSource.totalPages()) {
+                alert(kendo.format("Page must be a number between 1 and {0}", dataSource.totalPages()));
+                return;
+            }
+
+            // query the remote service
+            dataSource.query({
+                page: page,
+                pageSize: 10,
+                sort: {
+                    field: $("#order").val(),
+                    dir: $("#dir").val()
+                }
+            });
+        });
+
+        //initialize dropdownlist components
+        $("#order").kendoDropDownList();
+        $("#dir").kendoDropDownList();
+    });
+</script>   

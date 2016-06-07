@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Template</title>
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.min.css" />
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.dataviz.default.min.css" />
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.1.318/js/kendo.all.min.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div id="grid"></div>
+</body>
+
+</html>
+<script>
+$(function() {
+    $("#grid").kendoGrid({
+            columns: [{
+                    field: "name"
+                }, {
+                    command: [{
+                        name: "details",
+                        click : function (e) {
+                            // e.target is the DOM element representing the button
+                            var tr = $(e.target).closest('tr');
+                            // get the data bound to the current table row
+                            var data = this.dataItem(tr); 
+                            console.log("Details for " + data.name); 
+                        }
+
+                    }]
+                }
+            ],
+        dataSource: [{
+            name: "John Smith"
+        }]
+
+    });
+
+});
+</script>
